@@ -1,0 +1,14 @@
+[package]
+name = "makeup_syntect"
+version = "0.1.0"
+authors = []
+edition = "2021"
+
+[lib]
+name = "makeup_syntect"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.36.1"
+syntect = "5.2.0"
+two-face = { version = "0.4.2", features = ["syntect-default-onig"] }
