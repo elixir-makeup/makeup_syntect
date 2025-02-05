@@ -28,6 +28,9 @@ jobs:
             otp: 27.2
             lint: lint
 
+    env:
+      MAKEUP_SYNTECT_BUILD: 1
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Elixir

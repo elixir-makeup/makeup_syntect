@@ -12,7 +12,10 @@ defmodule MakeupSyntect.MixProject do
         main: "readme",
         extras: Path.wildcard("examples/*.md") ++ ["README.md"],
         source_url: "https://github.com/SteffenDE/makeup_syntect"
-      ]
+      ],
+      package: package(),
+      description: description(),
+      source_url: "https://github.com/SteffenDE/makeup_syntect"
     ]
   end
 
@@ -31,9 +34,31 @@ defmodule MakeupSyntect.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.36.1", runtime: false},
+      {:rustler_precompiled, "~> 0.8.2"},
+      {:rustler, "~> 0.36.1", runtime: false, optional: true},
       {:makeup, "~> 1.2"},
       {:ex_doc, "~> 0.34", only: :docs, runtime: false}
+    ]
+  end
+
+  defp description() do
+    "Language lexers for Makeup using the syntect Rust library"
+  end
+
+  defp package() do
+    [
+      files: [
+        "lib",
+        "priv/extra_syntaxes",
+        "README.md",
+        "LICENSE",
+        "native/makeup_syntect/src",
+        "native/makeup_syntect/*.toml",
+        "checksum-*.exs",
+        "mix.exs"
+      ],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/SteffenDE/makeup_syntect"}
     ]
   end
 end

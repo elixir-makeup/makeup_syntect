@@ -7,7 +7,15 @@ defmodule MakeupSyntect do
   For a list of supported langugages, see: `MakeupSyntect.Syntaxes`.
   """
 
-  use Rustler, otp_app: :makeup_syntect, crate: "makeup_syntect"
+  version = Mix.Project.config()[:version]
+
+  use RustlerPrecompiled,
+    otp_app: :makeup_syntect,
+    crate: "makeup_syntect",
+    base_url:
+      "https://github.com/SteffenDE/makeup_syntect/releases/download/v#{version}",
+    force_build: System.get_env("MAKEUP_SYNTECT_BUILD") in ["1", "true"],
+    version: version
 
   @syntax_set_key :makeup_syntect_syntax_set
 
