@@ -11,12 +11,7 @@ defmodule MakeupSyntect.Syntaxes do
   ```
   ````
 
-  #{
-    MakeupSyntect.supported_syntaxes()
-    |> Enum.sort_by(& &1.name)
-    |> Enum.map(&"  * #{&1.name} (`#{String.split(&1.name, [" ", "(", ")"], trim: true) |> Enum.join("_") |> String.downcase()}`)")
-    |> Enum.join("\n")
-  }
+  #{MakeupSyntect.supported_syntaxes() |> Enum.sort_by(& &1.name) |> Enum.map(&"  * #{&1.name} (`#{String.split(&1.name, [" ", "(", ")"], trim: true) |> Enum.join("_") |> String.downcase()}`)") |> Enum.join("\n")}
   """
 
   @doc """
