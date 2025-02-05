@@ -12,7 +12,7 @@ defmodule MakeupSyntect.Application do
   end
 
   defp excluded_languages do
-    Application.get_env(:makeup_syntect, :excluded_languages, ["elixir", "erlang", "eex", "heex"])
+    Application.get_env(:makeup_syntect, :excluded_languages, ["elixir", "erlang", "html_eex"])
   end
 
   @impl true
