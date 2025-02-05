@@ -42,9 +42,11 @@ defmodule MakeupSyntectTest do
   end
 
   test "can add own sublime-syntax files" do
+    syntax_set = MakeupSyntect.initialize_syntaxes_from_folders([__DIR__])
+
     assert lex("if foo {}",
              language: "Demo C",
-             syntax_folder: Application.app_dir(:makeup_syntect, "priv/demo_languages")
+             syntax_set: syntax_set
            ) == [keyword: "if", name: " foo {}"]
   end
 end

@@ -9,6 +9,8 @@ defmodule MakeupSyntect do
 
   use Rustler, otp_app: :makeup_syntect, crate: "makeup_syntect"
 
+  @syntax_set_key :makeup_syntect_syntax_set
+
   @doc """
   Tokenizes the given text using syntect.
 
@@ -16,11 +18,30 @@ defmodule MakeupSyntect do
     - text: The source code text to tokenize
     - opts: Optional keyword list of options
       - language: Optional language identifier (e.g. "rust", "html", "javascript")
+      - syntax_set: Optional syntax set resource (created via initialize_syntaxes_from_folders)
   """
   def tokenize(text, opts \\ []) do
     language = Keyword.get(opts, :language)
-    syntax_folder = Keyword.get(opts, :syntax_folder)
-    do_tokenize(text, language, syntax_folder)
+    syntax_set = Keyword.get(opts, :syntax_set, :persistent_term.get(@syntax_set_key, nil))
+    do_tokenize(text, language, syntax_set)
+  end
+
+  @doc """
+  Initializes a syntax set from the given folders. Returns a reference that can be used
+  in tokenize calls to avoid rebuilding the syntax set each time.
+  """
+  def initialize_syntaxes_from_folders(_folders), do: :erlang.nif_error(:nif_not_loaded)
+
+  @doc false
+  # Initializes and stores the default syntax set in persistent_term.
+  # Should be called during application startup.
+  def initialize_default_syntax_set(folders \\ []) do
+    syntax_set =
+      initialize_syntaxes_from_folders([
+        Application.app_dir(:makeup_syntect, "priv/extra_syntaxes") | folders
+      ])
+
+    :persistent_term.put(@syntax_set_key, syntax_set)
   end
 
   @doc false
@@ -28,5 +49,5 @@ defmodule MakeupSyntect do
 
   # NIF implementations
   @doc false
-  def do_tokenize(_text, _language, _syntax_folder), do: :erlang.nif_error(:nif_not_loaded)
+  def do_tokenize(_text, _language, _syntax_set), do: :erlang.nif_error(:nif_not_loaded)
 end

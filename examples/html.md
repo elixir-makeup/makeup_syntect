@@ -187,3 +187,20 @@
   </body>
 </html>
 ```
+
+### HEEx
+
+We tokenize HEEx components and slots as tag names. This is important in order to use
+`makeup_syntect` with `makeup_eex`'s HEEx lexer.
+
+```html
+<.header>
+  <:top_slot>Foo</:top_slot>
+  <.button>Click</.button>
+  <MyComponent.card />
+  <p>We support interpolation with {@name} and <%= @name %>.</p>
+  <script>
+    console.log("Hello World");
+  </script>
+</.header>
+```

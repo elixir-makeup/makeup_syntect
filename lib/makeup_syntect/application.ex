@@ -17,6 +17,8 @@ defmodule MakeupSyntect.Application do
 
   @impl true
   def start(_type, _args) do
+    MakeupSyntect.initialize_default_syntax_set()
+
     for %{name: name, codeblock_name: sanitized_name, extensions: extensions} <-
           languages_to_register_for() do
       Registry.register_lexer(MakeupSyntect.Lexer,

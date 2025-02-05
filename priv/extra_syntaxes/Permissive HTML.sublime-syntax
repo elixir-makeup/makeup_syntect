@@ -530,6 +530,8 @@ contexts:
         - match: '["''`<]'
           scope: invalid.illegal.attribute-value.html
         - include: entities
+    - match: (?=[{{ascii_space}}]|/?>)
+      pop: true
     - include: else-pop
 
   tag-class-attribute:

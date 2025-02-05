@@ -1,6 +1,7 @@
-use rustler::{Env, NifResult, NifTuple, NifMap};
+use rustler::{Env, NifResult, NifTuple, NifMap, ResourceArc, Resource};
 use syntect::easy::ScopeRegionIterator;
 use syntect::parsing::{ParseState, SyntaxReference, ScopeStack, ScopeStackOp};
+use std::sync::Mutex;
 
 #[derive(NifMap)]
 struct TokenMetadata {
@@ -20,6 +21,12 @@ struct SyntaxInfo {
     name: String,
     file_extensions: Vec<String>,
 }
+
+#[derive(Debug)]
+struct SyntaxSetResource(Mutex<syntect::parsing::SyntaxSet>);
+
+#[rustler::resource_impl(register = true)]
+impl Resource for SyntaxSetResource {}
 
 fn detect_language(syntax_ref: &SyntaxReference) -> String {
     syntax_ref.name.to_lowercase()
@@ -227,13 +234,26 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
 }
 
 #[rustler::nif]
-fn do_tokenize(env: Env, text: String, language_opt: Option<String>, syntax_folder: Option<String>) -> NifResult<Vec<Token>> {
-    let syntax_set = if let Some(folder) = syntax_folder {
-        let mut builder = two_face::syntax::extra_newlines().into_builder();
-        // Then load custom syntaxes from the folder
+fn initialize_syntaxes_from_folders(folders: Vec<String>) -> NifResult<ResourceArc<SyntaxSetResource>> {
+    let mut builder = two_face::syntax::extra_newlines().into_builder();
+    for folder in folders {
         builder.add_from_folder(folder, true)
             .map_err(|e| rustler::Error::Term(Box::new(e.to_string())))?;
-        builder.build()
+    }
+    
+    let syntax_set = builder.build();
+    Ok(ResourceArc::new(SyntaxSetResource(Mutex::new(syntax_set))))
+}
+
+#[rustler::nif]
+fn do_tokenize(
+    env: Env, 
+    text: String, 
+    language_opt: Option<String>, 
+    syntax_set_resource: Option<ResourceArc<SyntaxSetResource>>
+) -> NifResult<Vec<Token>> {
+    let syntax_set = if let Some(resource) = syntax_set_resource {
+        resource.0.lock().unwrap().clone()
     } else {
         two_face::syntax::extra_newlines()
     };
