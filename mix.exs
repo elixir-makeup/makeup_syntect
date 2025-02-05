@@ -1,10 +1,12 @@
 defmodule MakeupSyntect.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :makeup_syntect,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
