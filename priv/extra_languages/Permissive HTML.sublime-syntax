@@ -26,7 +26,7 @@ variables:
   # https://html.spec.whatwg.org/multipage/parsing.html#tag-name-state
   tag_name_char: '[^{{ascii_space}}/<>]'
   tag_name_break: (?=[^{{tag_name_char}}])
-  tag_name: '[A-Za-z]{{tag_name_char}}*'
+  tag_name: '[A-Za-z.:][{{tag_name_char}}]*'
 
   block_tag_name: |-
     (?ix:
@@ -175,6 +175,12 @@ contexts:
         - meta_scope: meta.tag.inline.table.html
         - include: tag-end-maybe-self-closing
         - include: tag-attributes
+    # allow HEEx components (<.foo ...) and slots (<:foo ...)
+    - match: </?(?=[.:])
+      scope: punctuation.definition.tag.begin.html
+      push:
+        - tag-other-body
+        - tag-other-name
     - match: </?(?=[A-Za-z]{{tag_name_char}}*?-)
       scope: punctuation.definition.tag.begin.html
       push:
