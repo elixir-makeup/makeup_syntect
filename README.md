@@ -5,6 +5,10 @@ More syntax definitions are included from [two-face](https://docs.rs/two-face/la
 
 At the moment, 205 different syntaxes are supported. For a list of supported languages, see [the documentation](https://steffende.github.io/makeup_syntect/MakeupSyntect.Syntaxes.html).
 
+MakeupSyntect automatically registers those syntaxes in Makeup's registry (exceptions see below),
+which allows them to be used in ExDoc and other projects using Makeup. The name to use when writing
+markdown code blocks in ExDoc is shown in brackets in the `MakeupSyntect.Syntaxes` module documentation.
+
 Note that by default, the following syntaxes are disabled, as the existing Makeup lexers are considered to be better:
 
 * `"elixir"`

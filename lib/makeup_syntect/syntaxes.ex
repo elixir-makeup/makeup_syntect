@@ -2,7 +2,21 @@ defmodule MakeupSyntect.Syntaxes do
   @moduledoc """
   This module provides a list of supported syntax definitions.
 
-  #{MakeupSyntect.supported_syntaxes() |> Enum.sort_by(& &1.name) |> Enum.map(&"  * #{&1.name}") |> Enum.join("\n")}
+  For usage in ExDoc, use the name in brackets as the language of the code block, e.g.
+
+  ````plaintext
+  ```http_request_and_response
+  GET / HTTP/1.1
+  ...
+  ```
+  ````
+
+  #{
+    MakeupSyntect.supported_syntaxes()
+    |> Enum.sort_by(& &1.name)
+    |> Enum.map(&"  * #{&1.name} (`#{String.split(&1.name, [" ", "(", ")"], trim: true) |> Enum.join("_") |> String.downcase()}`)")
+    |> Enum.join("\n")
+  }
   """
 
   @doc """
