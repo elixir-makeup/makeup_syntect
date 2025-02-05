@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "mix"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "cargo"
+    directory: "/native/makeup_syntect"
+    schedule:
+      interval: "weekly"
