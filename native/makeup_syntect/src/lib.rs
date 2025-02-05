@@ -1,7 +1,7 @@
-use rustler::{Env, NifResult, NifTuple, NifMap, ResourceArc, Resource};
-use syntect::easy::ScopeRegionIterator;
-use syntect::parsing::{ParseState, SyntaxReference, ScopeStack, ScopeStackOp};
+use rustler::{Env, NifMap, NifResult, NifTuple, Resource, ResourceArc};
 use std::sync::Mutex;
+use syntect::easy::ScopeRegionIterator;
+use syntect::parsing::{ParseState, ScopeStack, ScopeStackOp, SyntaxReference};
 
 #[derive(NifMap)]
 struct TokenMetadata {
@@ -32,7 +32,11 @@ fn detect_language(syntax_ref: &SyntaxReference) -> String {
     syntax_ref.name.to_lowercase()
 }
 
-fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifResult<rustler::Atom> {
+fn map_scope_to_token_type(
+    env: Env,
+    scope_name: &str,
+    token_str: &str,
+) -> NifResult<rustler::Atom> {
     let get_atom = |name: &str| rustler::Atom::from_str(env, name);
 
     // First check if it's whitespace
@@ -234,23 +238,26 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
 }
 
 #[rustler::nif]
-fn initialize_syntaxes_from_folders(folders: Vec<String>) -> NifResult<ResourceArc<SyntaxSetResource>> {
+fn initialize_syntaxes_from_folders(
+    folders: Vec<String>,
+) -> NifResult<ResourceArc<SyntaxSetResource>> {
     let mut builder = two_face::syntax::extra_newlines().into_builder();
     for folder in folders {
-        builder.add_from_folder(folder, true)
+        builder
+            .add_from_folder(folder, true)
             .map_err(|e| rustler::Error::Term(Box::new(e.to_string())))?;
     }
-    
+
     let syntax_set = builder.build();
     Ok(ResourceArc::new(SyntaxSetResource(Mutex::new(syntax_set))))
 }
 
 #[rustler::nif]
 fn do_tokenize(
-    env: Env, 
-    text: String, 
-    language_opt: Option<String>, 
-    syntax_set_resource: Option<ResourceArc<SyntaxSetResource>>
+    env: Env,
+    text: String,
+    language_opt: Option<String>,
+    syntax_set_resource: Option<ResourceArc<SyntaxSetResource>>,
 ) -> NifResult<Vec<Token>> {
     let syntax_set = if let Some(resource) = syntax_set_resource {
         resource.0.lock().unwrap().clone()
@@ -270,25 +277,25 @@ fn do_tokenize(
 
     let language = detect_language(&syntax);
     let mut parse_state = ParseState::new(syntax);
-    let mut tokens = Vec::new();    
+    let mut tokens = Vec::new();
     let mut stack = ScopeStack::new();
 
     // Split the text into lines while preserving line endings
     let lines: Vec<&str> = text.split_inclusive('\n').collect();
-    
+
     for line in lines {
         let ops: Vec<(usize, ScopeStackOp)> = parse_state.parse_line(&line, &syntax_set).unwrap();
-        
+
         for (token_str, op) in ScopeRegionIterator::new(&ops, line) {
-            stack.apply(op).map_err(|e| rustler::Error::Term(Box::new(e.to_string())))?;
-            
+            stack
+                .apply(op)
+                .map_err(|e| rustler::Error::Term(Box::new(e.to_string())))?;
+
             if token_str.is_empty() {
                 continue;
             }
 
-            let scopes: Vec<String> = stack.as_slice().iter()
-                .map(|s| s.build_string())
-                .collect();
+            let scopes: Vec<String> = stack.as_slice().iter().map(|s| s.build_string()).collect();
 
             // Use the scopes for token type mapping
             let scope_name = scopes.join(" ");
@@ -311,7 +318,7 @@ fn do_tokenize(
 #[rustler::nif]
 fn supported_syntaxes() -> NifResult<Vec<SyntaxInfo>> {
     let syntax_set = two_face::syntax::extra_newlines();
-    
+
     let syntaxes: Vec<SyntaxInfo> = syntax_set
         .syntaxes()
         .iter()
