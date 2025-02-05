@@ -5,7 +5,7 @@ use syntect::parsing::{ParseState, SyntaxReference, ScopeStack, ScopeStackOp};
 #[derive(NifMap)]
 struct TokenMetadata {
     language: String,
-    scope: String,
+    scope: Vec<String>,
 }
 
 #[derive(NifTuple)]
@@ -48,6 +48,8 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
         } else {
             "comment"
         }
+    } else if scope_name.contains("invalid") {
+        "error"
     } else if scope_name.contains("constant") {
         if scope_name.contains("numeric") || scope_name.contains("number") {
             if scope_name.contains("integer") {
@@ -69,10 +71,124 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
             }
         } else if scope_name.contains("language") {
             "keyword_constant"
+        } else if scope_name.contains("character.escape") {
+            "escape"
         } else {
             "name_constant"
         }
-    } else if scope_name.contains("string") {
+    } else if scope_name.contains("keyword") {
+        if scope_name.contains("type") {
+            "keyword_type"
+        } else if scope_name.contains("namespace") {
+            "keyword_namespace"
+        } else if scope_name.contains("declaration") {
+            "keyword_declaration"
+        } else if scope_name.contains("constant") {
+            "keyword_constant"
+        } else if scope_name.contains("pseudo") {
+            "keyword_pseudo"
+        } else if scope_name.contains("reserved") {
+            "keyword_reserved"
+        } else if scope_name.contains("control") {
+            "keyword"
+        } else if scope_name.contains("operator") {
+            if scope_name.contains("operator.word") {
+                "operator_word"
+            } else {
+                "operator"
+            }
+        } else {
+            "keyword"
+        }
+    } else if scope_name.contains("entity") {
+        if scope_name.contains("name.function") {
+            if scope_name.contains("magic") {
+                "name_function_magic"
+            } else if scope_name.contains("name.function.constructor") {
+                "keyword"
+            } else {
+                "name_function"
+            }
+        } else if scope_name.contains("class") {
+            "name_class"
+        } else if scope_name.contains("tag") {
+            "name_tag"
+        } else if scope_name.contains("section") {
+            "generic_heading"
+        } else if scope_name.contains("namespace") {
+            "name_namespace"
+        } else if scope_name.contains("other") {
+            "name_entity"
+        } else {
+            "name"
+        }
+    } else if scope_name.contains("variable") {
+        if scope_name.contains("variable.function") {
+            "name_function"
+        } else if scope_name.contains("parameter") {
+            "name_variable"
+        } else if scope_name.contains("instance") {
+            "name_variable_instance"
+        } else if scope_name.contains("global") {
+            "name_variable_global"
+        } else if scope_name.contains("class") {
+            "name_variable_class"
+        } else if scope_name.contains("magic") {
+            "name_variable_magic"
+        } else if scope_name.contains("label") {
+            "name_label"
+        } else if scope_name.contains("attribute") {
+            "name_attribute"
+        } else if scope_name.contains("language") {
+            "name_builtin"
+        } else {
+            "name_variable"
+        }
+    } else if scope_name.contains("support") {
+        if scope_name.contains("support.function") {
+            "name_function"
+        } else if scope_name.contains("support.class") {
+            "name_builtin_pseudo"
+        } else if scope_name.contains("support.type") {
+            "name_builtin"
+        } else {
+            "name_builtin"
+        }
+    } else if scope_name.contains("markup") {
+        if scope_name.contains("deleted") {
+            "generic_deleted"
+        } else if scope_name.contains("inserted") {
+            "generic_inserted"
+        } else if scope_name.contains("heading") {
+            "generic_heading"
+        } else if scope_name.contains("bold") {
+            "generic_strong"
+        } else if scope_name.contains("italic") {
+            "generic_emph"
+        } else {
+            "generic"
+        }
+    } else if scope_name.contains("punctuation") {
+        if scope_name.contains("meta.string") && scope_name.contains("meta.interpolation") {
+            "string_interpol"
+        } else {
+            "punctuation"
+        }
+    } else if scope_name.contains("invalid") {
+        if scope_name.contains("deprecated") {
+            "error"
+        } else {
+            "error"
+        }
+    } else if scope_name.contains("storage") {
+        if scope_name.contains("type") {
+            "keyword_type"
+        } else if scope_name.contains("modifier") {
+            "keyword_declaration"
+        } else {
+            "keyword"
+        }
+    } else if scope_name.contains("string") && !scope_name.contains("meta.interpolation") {
         if scope_name.contains("regex") {
             "string_regex"
         } else if scope_name.contains("heredoc") {
@@ -100,108 +216,8 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
         } else {
             "string"
         }
-    } else if scope_name.contains("keyword") {
-        if scope_name.contains("type") {
-            "keyword_type"
-        } else if scope_name.contains("namespace") {
-            "keyword_namespace"
-        } else if scope_name.contains("declaration") {
-            "keyword_declaration"
-        } else if scope_name.contains("constant") {
-            "keyword_constant"
-        } else if scope_name.contains("pseudo") {
-            "keyword_pseudo"
-        } else if scope_name.contains("reserved") {
-            "keyword_reserved"
-        } else if scope_name.contains("control") {
-            "keyword"
-        } else {
-            "keyword"
-        }
-    } else if scope_name.contains("entity.name") {
-        if scope_name.contains("function") {
-            if scope_name.contains("magic") {
-                "name_function_magic"
-            } else {
-                "name_function"
-            }
-        } else if scope_name.contains("class") {
-            "name_class"
-        } else if scope_name.contains("tag") {
-            "name_tag"
-        } else if scope_name.contains("section") {
-            "generic_heading"
-        } else if scope_name.contains("namespace") {
-            "name_namespace"
-        } else {
-            "name"
-        }
-    } else if scope_name.contains("variable") {
-        if scope_name.contains("parameter") {
-            "name_variable"
-        } else if scope_name.contains("instance") {
-            "name_variable_instance"
-        } else if scope_name.contains("global") {
-            "name_variable_global"
-        } else if scope_name.contains("class") {
-            "name_variable_class"
-        } else if scope_name.contains("magic") {
-            "name_variable_magic"
-        } else {
-            "name_variable"
-        }
-    } else if scope_name.contains("support") {
-        if scope_name.contains("function") {
-            "name_builtin"
-        } else if scope_name.contains("class") {
-            "name_builtin_pseudo"
-        } else if scope_name.contains("type") {
-            "name_builtin"
-        } else {
-            "name_builtin"
-        }
-    } else if scope_name.contains("markup") {
-        if scope_name.contains("deleted") {
-            "generic_deleted"
-        } else if scope_name.contains("inserted") {
-            "generic_inserted"
-        } else if scope_name.contains("heading") {
-            "generic_heading"
-        } else if scope_name.contains("bold") {
-            "generic_strong"
-        } else if scope_name.contains("italic") {
-            "generic_emph"
-        } else if scope_name.contains("raw") {
-            "generic"
-        } else if scope_name.contains("quote") {
-            "generic"
-        } else {
-            "text"
-        }
-    } else if scope_name.contains("punctuation") {
-        "punctuation"
-    } else if scope_name.contains("operator") {
-        if scope_name.contains("word") {
-            "operator_word"
-        } else {
-            "operator"
-        }
-    } else if scope_name.contains("invalid") {
-        if scope_name.contains("deprecated") {
-            "error"
-        } else {
-            "error"
-        }
-    } else if scope_name.contains("storage") {
-        if scope_name.contains("type") {
-            "keyword_type"
-        } else if scope_name.contains("modifier") {
-            "keyword_declaration"
-        } else {
-            "keyword"
-        }
     } else {
-        "text"
+        "name"
     };
 
     get_atom(token_type)
@@ -247,19 +263,19 @@ fn do_tokenize(env: Env, text: String, language_opt: Option<String>, syntax_fold
                 continue;
             }
 
-            // Get the full scope name from the stack
-            let scope_name = stack.as_slice().iter()
+            let scopes: Vec<String> = stack.as_slice().iter()
                 .map(|s| s.build_string())
-                .collect::<Vec<_>>()
-                .join(" ");
+                .collect();
 
+            // Use the scopes for token type mapping
+            let scope_name = scopes.join(" ");
             let token_type = map_scope_to_token_type(env, &scope_name, token_str)?;
 
             tokens.push(Token {
                 token_type,
                 metadata: TokenMetadata {
                     language: language.clone(),
-                    scope: scope_name,
+                    scope: scopes,
                 },
                 content: token_str.to_string(),
             });
