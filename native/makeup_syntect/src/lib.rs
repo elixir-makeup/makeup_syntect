@@ -109,13 +109,13 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
             } else {
                 "name_function"
             }
-        } else if scope_name.contains("class") {
+        } else if scope_name.contains("name.class") {
             "name_class"
-        } else if scope_name.contains("tag") {
+        } else if scope_name.contains("name.tag") {
             "name_tag"
-        } else if scope_name.contains("section") {
+        } else if scope_name.contains("name.section") {
             "generic_heading"
-        } else if scope_name.contains("namespace") {
+        } else if scope_name.contains("name.namespace") {
             "name_namespace"
         } else if scope_name.contains("other") {
             "name_entity"

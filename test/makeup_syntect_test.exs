@@ -13,17 +13,17 @@ defmodule MakeupSyntectTest do
              punctuation: "<?",
              name_tag: "xml",
              whitespace: " ",
-             text: "version",
+             name_entity: "version",
              punctuation: "=",
-             string_double: "\"",
+             punctuation: "\"",
              string_double: "1.0",
-             string_double: "\"",
+             punctuation: "\"",
              whitespace: " ",
-             text: "encoding",
+             name_entity: "encoding",
              punctuation: "=",
-             string_double: "\"",
+             punctuation: "\"",
              string_double: "UTF-8",
-             string_double: "\"",
+             punctuation: "\"",
              punctuation: "?>"
            ]
   end
@@ -45,6 +45,6 @@ defmodule MakeupSyntectTest do
     assert lex("if foo {}",
              language: "Demo C",
              syntax_folder: Application.app_dir(:makeup_syntect, "priv/demo_languages")
-           ) == [keyword: "if", text: " foo {}"]
+           ) == [keyword: "if", name: " foo {}"]
   end
 end
