@@ -216,7 +216,10 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
         } else {
             "string"
         }
+    } else if scope_name.contains("text.plain") {
+        "text"
     } else {
+        // name renders better in makeup than text
         "name"
     };
 
