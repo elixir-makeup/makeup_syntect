@@ -29,17 +29,13 @@ defmodule MakeupSyntect.MixProject do
     ]
   end
 
-  def cli do
-    [preferred_envs: [docs: :docs]]
-  end
-
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:rustler_precompiled, "~> 0.8.2"},
       {:rustler, "~> 0.36.1", runtime: false, optional: true},
       {:makeup, "~> 1.2"},
-      {:ex_doc, "~> 0.34", only: :docs, runtime: false}
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false}
     ]
   end
 

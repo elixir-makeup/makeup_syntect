@@ -32,3 +32,5 @@ makeup_syntect-*.tar
 
 # Cargo build dir
 /native/*/target
+
+/checksum-*
