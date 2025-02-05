@@ -109,7 +109,7 @@ fn map_scope_to_token_type(env: Env, scope_name: &str, token_str: &str) -> NifRe
             } else {
                 "name_function"
             }
-        } else if scope_name.contains("name.class") {
+        } else if scope_name.contains("entity.name.class") {
             "name_class"
         } else if scope_name.contains("name.tag") {
             "name_tag"
