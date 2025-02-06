@@ -1,5 +1,6 @@
 defmodule MakeupSyntectTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+
   doctest MakeupSyntect
 
   defp lex(text, opts \\ []) do
@@ -13,13 +14,13 @@ defmodule MakeupSyntectTest do
              punctuation: "<?",
              name_tag: "xml",
              whitespace: " ",
-             name_entity: "version",
+             name_attribute: "version",
              punctuation: "=",
              punctuation: "\"",
              string_double: "1.0",
              punctuation: "\"",
              whitespace: " ",
-             name_entity: "encoding",
+             name_attribute: "encoding",
              punctuation: "=",
              punctuation: "\"",
              string_double: "UTF-8",

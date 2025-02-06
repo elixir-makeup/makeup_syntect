@@ -128,6 +128,9 @@ fn map_scope_to_token_type(
             "generic_heading"
         } else if scope_name.contains("name.namespace") {
             "name_namespace"
+        } else if scope_name.contains("entity.other.attribute-name") {
+            // https://www.sublimetext.com/docs/scope_naming.html#entity
+            "name_attribute"
         } else if scope_name.contains("other") {
             "name_entity"
         } else {
@@ -316,8 +319,12 @@ fn do_tokenize(
 }
 
 #[rustler::nif]
-fn supported_syntaxes() -> NifResult<Vec<SyntaxInfo>> {
-    let syntax_set = two_face::syntax::extra_newlines();
+fn get_supported_syntaxes(syntax_set_resource: Option<ResourceArc<SyntaxSetResource>>) -> NifResult<Vec<SyntaxInfo>> {
+    let syntax_set = if let Some(resource) = syntax_set_resource {
+        resource.0.lock().unwrap().clone()
+    } else {
+        two_face::syntax::extra_newlines()
+    };
 
     let syntaxes: Vec<SyntaxInfo> = syntax_set
         .syntaxes()

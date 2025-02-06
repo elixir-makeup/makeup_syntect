@@ -1,0 +1,15 @@
+# Changelog
+
+## v0.1.1
+
+### Bug fixes
+
+* Properly classify HTML attributes as `:name_attribute` instead of `:name_entity`
+
+### Enhancements
+
+* Allow to configure extra syntaxes to load at compile time through the `:extra_syntax_folders` configuration option. These are also registered into Makeup.
+
+## v0.1.0
+
+Initial release.

@@ -44,17 +44,24 @@ defmodule MakeupSyntect do
   # Should be called during application startup.
   def initialize_default_syntax_set(folders \\ []) do
     syntax_set =
-      initialize_syntaxes_from_folders([
-        Application.app_dir(:makeup_syntect, "priv/extra_syntaxes") | folders
-      ])
+      initialize_syntaxes_from_folders(
+        [
+          Application.app_dir(:makeup_syntect, "priv/extra_syntaxes")
+        ] ++ Application.get_env(:makeup_syntect, :extra_syntax_folders, []) ++ folders
+      )
 
     :persistent_term.put(@syntax_set_key, syntax_set)
   end
 
   @doc false
-  def supported_syntaxes(), do: :erlang.nif_error(:nif_not_loaded)
+  def supported_syntaxes() do
+    get_supported_syntaxes(:persistent_term.get(@syntax_set_key, nil))
+  end
 
   # NIF implementations
   @doc false
   def do_tokenize(_text, _language, _syntax_set), do: :erlang.nif_error(:nif_not_loaded)
+
+  @doc false
+  def get_supported_syntaxes(_syntax_set), do: :erlang.nif_error(:nif_not_loaded)
 end
