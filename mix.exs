@@ -1,7 +1,7 @@
 defmodule MakeupSyntect.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project do
     [
@@ -12,7 +12,7 @@ defmodule MakeupSyntect.MixProject do
       deps: deps(),
       docs: [
         main: "readme",
-        extras: Path.wildcard("examples/*.md") ++ ["README.md"],
+        extras: Path.wildcard("examples/*.md") ++ ["README.md", "CHANGELOG.md"],
         source_url: "https://github.com/SteffenDE/makeup_syntect"
       ],
       package: package(),
@@ -49,6 +49,7 @@ defmodule MakeupSyntect.MixProject do
         "lib",
         "priv/extra_syntaxes",
         "README.md",
+        "CHANGELOG.md",
         "LICENSE",
         "native/makeup_syntect/src",
         "native/makeup_syntect/*.toml",
