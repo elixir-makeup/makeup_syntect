@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.2
+
+### Bug fixes
+
+* Ensure HTML id and class attributes are properly handled when empty for HEEx
+
 ## v0.1.1
 
 ### Bug fixes

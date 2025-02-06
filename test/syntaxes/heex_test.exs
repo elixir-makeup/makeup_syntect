@@ -33,9 +33,12 @@ defmodule MakeupSyntect.Syntaxes.HEExTest do
   end
 
   test "handles empty heex attributes" do
-    assert lex(~s(<.dynamic_component module= function= shared="Yay" />)) == [
+    assert lex(~s(<.dynamic_component id= module= function= shared="Yay" />)) == [
              {:punctuation, "<"},
              {:name_tag, ".dynamic_component"},
+             {:whitespace, " "},
+             {:name_attribute, "id"},
+             {:punctuation, "="},
              {:whitespace, " "},
              {:name_attribute, "module"},
              {:punctuation, "="},

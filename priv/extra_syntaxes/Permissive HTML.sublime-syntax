@@ -586,6 +586,8 @@ contexts:
         - match: '["''`<]'
           scope: invalid.illegal.attribute-value.html
         - include: entities
+    - match: (?=[{{ascii_space}}]|/?>)
+      pop: true
     - include: else-pop
 
   tag-id-attribute:
@@ -634,6 +636,8 @@ contexts:
         - match: '["''`<]'
           scope: invalid.illegal.attribute-value.html
         - include: entities
+    - match: (?=[{{ascii_space}}]|/?>)
+      pop: true
     - include: else-pop
 
   tag-style-attribute:
@@ -727,7 +731,7 @@ contexts:
     - include: tag-generic-attribute
 
   tag-attribute-value-separator:
-    - match: (?=[{{ascii_space}}])
+    - match: (?=[{{ascii_space}}]|)
       push:
         - clear_scopes: 1 # clear `meta.class-name` or `meta.toc-list.id`
         - include: else-pop
