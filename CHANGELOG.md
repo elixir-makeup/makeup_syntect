@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.3
+
+Moved `makeup_syntect` to the [elixir-makeup](https://github.com/elixir-makeup) GitHub origanization.
+
 ## v0.1.2
 
 ### Bug fixes

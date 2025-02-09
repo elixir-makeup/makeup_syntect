@@ -145,7 +145,7 @@ checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
 
 [[package]]
 name = "makeup_syntect"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "rustler",
  "syntect",

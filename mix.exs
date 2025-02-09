@@ -1,7 +1,7 @@
 defmodule MakeupSyntect.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.1.3"
 
   def project do
     [
@@ -13,11 +13,11 @@ defmodule MakeupSyntect.MixProject do
       docs: [
         main: "readme",
         extras: Path.wildcard("examples/*.md") ++ ["README.md", "CHANGELOG.md"],
-        source_url: "https://github.com/SteffenDE/makeup_syntect"
+        source_url: "https://github.com/elixir-makeup/makeup_syntect"
       ],
       package: package(),
       description: description(),
-      source_url: "https://github.com/SteffenDE/makeup_syntect"
+      source_url: "https://github.com/elixir-makeup/makeup_syntect"
     ]
   end
 
@@ -57,7 +57,7 @@ defmodule MakeupSyntect.MixProject do
         "mix.exs"
       ],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/SteffenDE/makeup_syntect"}
+      links: %{"GitHub" => "https://github.com/elixir-makeup/makeup_syntect"}
     ]
   end
 end

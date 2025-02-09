@@ -12,7 +12,7 @@ defmodule MakeupSyntect do
   use RustlerPrecompiled,
     otp_app: :makeup_syntect,
     crate: "makeup_syntect",
-    base_url: "https://github.com/SteffenDE/makeup_syntect/releases/download/v#{version}",
+    base_url: "https://github.com/elixir-makeup/makeup_syntect/releases/download/v#{version}",
     force_build: System.get_env("MAKEUP_SYNTECT_BUILD") in ["1", "true"],
     version: version
 

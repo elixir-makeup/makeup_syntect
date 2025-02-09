@@ -32,7 +32,7 @@ The package can be installed by adding `makeup_syntect` to your list of dependen
 ```elixir
 def deps do
   [
-    {:makeup_syntect, github: "SteffenDE/makeup_syntect"}
+    {:makeup_syntect, "~> 0.1"}
   ]
 end
 ```
