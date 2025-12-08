@@ -9,6 +9,6 @@ name = "makeup_syntect"
 crate-type = ["cdylib"]
 
 [dependencies]
-rustler = "0.37.0"
+rustler = "0.37.2"
 syntect = "5.2.0"
 two-face = { version = "0.4.3", features = ["syntect-default-onig"] }
