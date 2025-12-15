@@ -98,13 +98,10 @@ runs:
         echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
 
     - name: Install Zig
-      if: ${{ inputs.use-zig == 'true' && runner.os == 'Linux' && runner.arch == 'X64' }}
-      shell: bash
-      run: |
-        wget -q https://ziglang.org/download/0.15.2/zig-x86_64-linux-0.15.2.tar.xz
-        tar -xf zig-x86_64-linux-0.15.2.tar.xz
-        sudo mv zig-x86_64-linux-0.15.2 /usr/local/zig
-        echo "/usr/local/zig" >> $GITHUB_PATH
+      if: ${{ inputs.use-zig == 'true' }}
+      uses: mlugg/setup-zig@v2
+      with:
+        version: 0.15.2
 
     - name: Install cargo-zigbuild
       if: ${{ inputs.use-zig == 'true' }}
