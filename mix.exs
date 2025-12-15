@@ -33,7 +33,7 @@ defmodule MakeupSyntect.MixProject do
   defp deps do
     [
       {:rustler_precompiled, "~> 0.8.2"},
-      {:rustler, "~> 0.36.2", runtime: false, optional: true},
+      {:rustler, "~> 0.37.2", runtime: false, optional: true},
       {:makeup, "~> 1.2"},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false}
     ]
