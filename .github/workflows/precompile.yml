@@ -47,7 +47,7 @@ jobs:
       with:
         # TODO: check if a later version works in the future
         # https://elixirforum.com/t/rustler-precompiled-segfaults-in-gh-action/71189/10
-        toolchain: 1.86.0
+        toolchain: 1.89.0
         target: ${{ matrix.job.target }}
 
     - name: Build the project
