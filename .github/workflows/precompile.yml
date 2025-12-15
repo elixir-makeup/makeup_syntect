@@ -57,6 +57,7 @@ jobs:
         target: ${{ matrix.job.target }}
         nif-version: ${{ matrix.nif }}
         use-cross: ${{ matrix.job.use-cross }}
+        cross-version: ${{ matrix.job.cross-version || 'from-source' }}
         project-dir: "native/makeup_syntect"
 
     - name: Artifact upload
