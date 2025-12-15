@@ -102,8 +102,8 @@ runs:
       shell: bash
       run: |
         wget -q https://ziglang.org/download/0.15.2/zig-x86_64-linux-0.15.2.tar.xz
-        tar -xf zig-linux-x86_64-0.15.2.tar.xz
-        sudo mv zig-linux-x86_64-0.15.2 /usr/local/zig
+        tar -xf zig-x86_64-linux-0.15.2.tar.xz
+        sudo mv zig-x86_64-linux-0.15.2 /usr/local/zig
         echo "/usr/local/zig" >> $GITHUB_PATH
 
     - name: Install cargo-zigbuild
