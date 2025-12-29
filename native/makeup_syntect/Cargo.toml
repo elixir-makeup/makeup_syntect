@@ -11,4 +11,4 @@ crate-type = ["cdylib"]
 [dependencies]
 rustler = "0.37.2"
 syntect = "5.2.0"
-two-face = { version = "0.4.3", features = ["syntect-default-onig"] }
+two-face = { version = "0.5.1", features = ["syntect-default-onig"] }
