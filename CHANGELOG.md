@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.4
+
+* Updated syntect and two-face dependencies.
+  * Adds support for `debsources`, `GDScript`, `Idris`, `Odin`, `Typst`, `VHDL` syntaxes
+
 ## v0.1.3
 
 Moved `makeup_syntect` to the [elixir-makeup](https://github.com/elixir-makeup) GitHub origanization.
