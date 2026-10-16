@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.5
+
+* Updated two-face
+* Allow `rustler_precompiled` 0.10
+
 ## v0.1.4
 
 * Updated syntect and two-face dependencies.
