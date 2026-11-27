@@ -25,6 +25,30 @@ config :makeup_syntect,
   excluded_languages: []                    # default: ["elixir", "erlang", "html_eex"]
 ```
 
+## Code block names
+
+A code block can use the syntax name in lowercase with spaces and brackets replaced by
+underscores (for example `lean_4` for "Lean 4"), or one of the syntax's file extensions
+(for example `lean`, `rs` or `py`). A syntax name always takes precedence over a file extension.
+If several syntaxes use the same file extension, the syntax that was added last wins.
+
+## Adding and overriding syntaxes
+
+Use the `:extra_syntax_folders` option to load your own `.sublime-syntax` files. MakeupSyntect
+loads them at application start and registers them in Makeup like the bundled syntaxes:
+
+```elixir
+config :makeup_syntect,
+  extra_syntax_folders: [Path.expand("../priv/syntaxes", __DIR__)]
+```
+
+Syntaxes are added in this order: the bundled syntaxes, the syntaxes in this package's
+`priv/extra_syntaxes`, and then the folders in `:extra_syntax_folders`. A syntax that is added
+later overrides earlier syntaxes with the same file extension or name. For example, a grammar with
+`name: Lean` and `file_extensions: [lean]` replaces the bundled "Lean 4" syntax for `lean` code blocks
+and adds the `lean` code block name. The bundled syntax stays available as `lean_4`. This package
+uses the same mechanism to replace the bundled HTML syntax with a more permissive version for HEEx.
+
 ## Installation
 
 The package can be installed by adding `makeup_syntect` to your list of dependencies in `mix.exs`:

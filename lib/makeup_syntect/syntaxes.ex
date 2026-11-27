@@ -11,6 +11,10 @@ defmodule MakeupSyntect.Syntaxes do
   ```
   ````
 
+  File extensions also work as code block names, for example `rs` or `lean`.
+  If several syntaxes use the same extension, the syntax that was added last wins.
+  A syntax name always takes precedence over a file extension.
+
   #{MakeupSyntect.supported_syntaxes() |> Enum.sort_by(& &1.name) |> Enum.map(&"  * #{&1.name} (`#{String.split(&1.name, [" ", "(", ")"], trim: true) |> Enum.join("_") |> String.downcase()}`)") |> Enum.join("\n")}
   """
 

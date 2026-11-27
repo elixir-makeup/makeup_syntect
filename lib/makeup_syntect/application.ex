@@ -19,8 +19,19 @@ defmodule MakeupSyntect.Application do
   def start(_type, _args) do
     MakeupSyntect.initialize_default_syntax_set()
 
-    for %{name: name, codeblock_name: sanitized_name, extensions: extensions} <-
-          languages_to_register_for() do
+    languages = languages_to_register_for()
+
+    # File extensions are registered as names first, so that syntax names take
+    # precedence. For an extension shared by several syntaxes, the last syntax wins,
+    # which matches syntect's `find_syntax_by_extension`.
+    for %{name: name, extensions: extensions} <- languages, extension <- extensions do
+      Registry.register_lexer_with_name(
+        String.downcase(extension),
+        {MakeupSyntect.Lexer, [language: name]}
+      )
+    end
+
+    for %{name: name, codeblock_name: sanitized_name, extensions: extensions} <- languages do
       Registry.register_lexer(MakeupSyntect.Lexer,
         options: [language: name],
         names: [name, sanitized_name],

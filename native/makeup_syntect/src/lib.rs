@@ -32,6 +32,17 @@ fn detect_language(syntax_ref: &SyntaxReference) -> String {
     syntax_ref.name.to_lowercase()
 }
 
+// Entity scopes that name a type. They are highlighted like `entity.name.class`.
+const TYPE_NAME_SCOPES: &[&str] = &[
+    "entity.name.type",
+    "entity.name.struct",
+    "entity.name.enum",
+    "entity.name.union",
+    "entity.name.interface",
+    "entity.name.trait",
+    "entity.name.impl",
+];
+
 fn map_scope_to_token_type(
     env: Env,
     scope_name: &str,
@@ -120,8 +131,12 @@ fn map_scope_to_token_type(
             } else {
                 "name_function"
             }
-        } else if scope_name.contains("entity.name.class") {
+        } else if scope_name.contains("entity.name.class")
+            || TYPE_NAME_SCOPES.iter().any(|s| scope_name.contains(s))
+        {
             "name_class"
+        } else if scope_name.contains("entity.name.label") {
+            "name_label"
         } else if scope_name.contains("name.tag") {
             "name_tag"
         } else if scope_name.contains("name.section") {
@@ -131,10 +146,10 @@ fn map_scope_to_token_type(
         } else if scope_name.contains("entity.other.attribute-name") {
             // https://www.sublimetext.com/docs/scope_naming.html#entity
             "name_attribute"
-        } else if scope_name.contains("other") {
-            "name_entity"
         } else {
-            "name"
+            // Generic entity names, e.g. `entity.name.lean4`, are still names the grammar
+            // marks as special, so they get a highlighted type instead of plain `:name`.
+            "name_entity"
         }
     } else if scope_name.contains("variable") {
         if scope_name.contains("variable.function") {
@@ -230,11 +245,8 @@ fn map_scope_to_token_type(
         } else {
             "string"
         }
-    } else if scope_name.contains("text.plain") {
-        "text"
     } else {
-        // name renders better in makeup than text
-        "name"
+        "text"
     };
 
     get_atom(token_type)
