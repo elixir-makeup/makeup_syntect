@@ -9,7 +9,7 @@ defmodule MakeupSyntect.Syntaxes.ExtraSyntaxesConfigTest do
 
     assert MakeupSyntect.Lexer.lex("if foo {}", language: "Demo C") == [
              {:keyword, %{scope: ["source.c", "keyword.control.c"], language: "demo c"}, "if"},
-             {:name, %{scope: ["source.c"], language: "demo c"}, " foo {}"}
+             {:text, %{scope: ["source.c"], language: "demo c"}, " foo {}"}
            ]
 
     assert %{name: "Demo C", codeblock_name: "demo_c"} =
